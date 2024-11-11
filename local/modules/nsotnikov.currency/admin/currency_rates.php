@@ -19,10 +19,9 @@ $sTableID = "currency_rate_list";
 $oAdminSort = new CAdminSorting($sTableID, "ID", "desc");
 $oAdminList = new CAdminList($sTableID, $oAdminSort);
 
-
 $filterFields = [
     ["id" => "CODE", "name" => Loc::getMessage('CURRENCY_CODE'), "type" => "string", "filterable" => "="],
-    ["id" => "DATE", "name" => Loc::getMessage('CURRENCY_DATE'), "type" => "date", "filterable" => "="],
+    ["id" => "DATE", "name" => Loc::getMessage('CURRENCY_DATE'), "type" => "datetime", "filterable" => ">="],
     ["id" => "COURSE", "name" => Loc::getMessage('CURRENCY_COURSE'), "type" => "string", "filterable" => "="],
 ];
 
