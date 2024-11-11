@@ -1,9 +1,8 @@
 <?
-$scriptPath = __FILE__;
-$dir = '';
-if (strpos($scriptPath, 'bitrix') !== false) {
-    $dir = '/bitrix';
-} elseif (strpos($scriptPath, 'local') !== false) {
-    $dir = '/local';
+$localDir = $_SERVER["DOCUMENT_ROOT"] . "/local/modules/nsotnikov.currency/admin/currency_rates.php";
+$bitrixDir = $_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/nsotnikov.currency/admin/currency_rates.php";
+if (file_exists($localDir)) {
+    require $localDir;
+} else {
+    require $bitrixDir;
 }
-require($_SERVER["DOCUMENT_ROOT"] . $dir . "/modules/nsotnikov.currency/admin/currency_rates.php");
