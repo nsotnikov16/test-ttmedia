@@ -1,14 +1,13 @@
 <?php
-
 use Bitrix\Main\Application;
 use Bitrix\Main\ModuleManager;
 use Bitrix\Main\Localization\Loc;
-use Bitrix\Main\Loader;
 
 Loc::loadMessages(__FILE__);
 
 class nsotnikov_currency extends CModule
 {
+    private string $MODULE_MAIN_DIR;
 
     function __construct()
     {
@@ -23,6 +22,7 @@ class nsotnikov_currency extends CModule
 
         $this->PARTNER_NAME = Loc::getMessage("PARTNER_NAME");
         $this->PARTNER_URI = Loc::getMessage("PARTNER_URI");
+        $this->MODULE_MAIN_DIR = $this->getMainDir();
     }
 
     public function DoInstall()
@@ -88,13 +88,13 @@ class nsotnikov_currency extends CModule
     public function installFiles()
     {
         CopyDirFiles(__DIR__ . "/admin", $_SERVER["DOCUMENT_ROOT"] . "/bitrix/admin", true, true);
-        CopyDirFiles(__DIR__ . "/components", $_SERVER["DOCUMENT_ROOT"] . "/local/components", true, true);
+        CopyDirFiles(__DIR__ . "/components", $_SERVER["DOCUMENT_ROOT"] . $this->MODULE_MAIN_DIR . "/components", true, true);
     }
 
     public function uninstallFiles()
     {
         DeleteDirFiles(__DIR__ . "/admin", $_SERVER["DOCUMENT_ROOT"] . "/bitrix/admin");
-        DeleteDirFilesEx("/local/components/nsotnikov");
+        DeleteDirFilesEx($this->MODULE_MAIN_DIR . "/components/nsotnikov");
     }
 
     public function installEvents() {}
@@ -121,5 +121,17 @@ class nsotnikov_currency extends CModule
     private function isVersionD7()
     {
         return CheckVersion(\Bitrix\Main\ModuleManager::getVersion("main"), "14.00.00");
+    }
+
+    private function getMainDir(): string
+    {
+        $scriptPath = __FILE__;
+        if (strpos($scriptPath, 'bitrix') !== false) {
+            return '/bitrix';
+        } elseif (strpos($scriptPath, 'local') !== false) {
+            return '/local';
+        }
+
+        return '';
     }
 }
